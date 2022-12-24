@@ -1,4 +1,4 @@
-#CrudApp
+CrudApp
 1) Контроллеры находятся в папке controller
 2) POJO классы в папке model
 3) Репозитарные классы в папке repository. В качестве
