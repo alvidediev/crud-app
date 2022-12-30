@@ -13,7 +13,6 @@ public class SpecialtiesView {
 
     public void startWorkWithSpecialties() {
         scanner = new Scanner(System.in);
-        boolean stopper = true;
 
         System.out.println("Добро пожаловать в меню специальностей!\n" +
                 "1) Добавить специальностей\n" +
@@ -23,23 +22,23 @@ public class SpecialtiesView {
                 "5) Вернуться в главное меню");
 
         final int choice = scanner.nextInt();
-        while (stopper) {
-            if (choice == 1) {
-                addSpecialty();
-                stopper = false;
-            } else if (choice == 2) {
-                updateSpecialty();
-                stopper = false;
-            } else if (choice == 3) {
-                deleteSpecialty();
-                stopper = false;
-            } else if (choice == 4) {
-                showAllSpecialties();
-                stopper = false;
-            } else if (choice == 5) {
-                MainView mainView = new MainView();
-                mainView.start();
-                stopper = false;
+        while (true) {
+            switch (choice) {
+                case 1:
+                    addSpecialty();
+                    break;
+                case 2:
+                    updateSpecialty();
+                    break;
+                case 3:
+                    deleteSpecialty();
+                    break;
+                case 4:
+                    showAllSpecialties();
+                    break;
+                default:
+                    MainView mainView = new MainView();
+                    mainView.start();
             }
         }
     }

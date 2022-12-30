@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface DevelopersRepository extends GenericRepository<Developer, Integer> {
 
-    void update(Integer id, String firstName, String lastName);
 }

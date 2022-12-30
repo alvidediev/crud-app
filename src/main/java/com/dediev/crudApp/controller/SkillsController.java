@@ -24,7 +24,10 @@ public class SkillsController {
     }
 
     public void update(Integer id, String name){
-        gsonSkillRepository.update(id, name);
+        Skill skill = new Skill();
+        skill.setId(id);
+        skill.setName(name);
+        gsonSkillRepository.update(skill);
     }
 
     public void delete(Integer id){

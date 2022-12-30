@@ -80,24 +80,32 @@ public class GsonDevelopersRepositoryImpl implements DevelopersRepository {
         return developerToSave;
     }
 
+    @Override
+    public Developer update(Developer developerToUpdate) {
+        List<Developer> currentDeveloper = readDevelopersFromFile();
+        currentDeveloper.forEach(existingDeveloper -> {
+            if(existingDeveloper.getId().equals(developerToUpdate.getId())) {
+                existingDeveloper.setFirstName(developerToUpdate.getFirstName());
+                existingDeveloper.setLastName(developerToUpdate.getLastName());
+                existingDeveloper.setSkill(developerToUpdate.getSkill());
+                existingDeveloper.setSpecialty(developerToUpdate.getSpecialty());
+            }
+        });
+        writeDevelopersToFile(currentDeveloper);
+        return developerToUpdate;
+    }
 
 
     @Override
     public void deleteById(Integer id) {
-        List<Developer> currentList = readDevelopersFromFile();
+        List<Developer> currenDeveloper = readDevelopersFromFile();
 
-        currentList.get(id - 1).setStatus(Status.DELETED);
-        writeDevelopersToFile(currentList);
+        currenDeveloper.forEach(existingDeveloper -> {
+            if(existingDeveloper.getId().equals(id)){
+                existingDeveloper.setStatus(Status.DELETED);
+            }
+        });
 
-
-    }
-
-    @Override
-    public void update(Integer id, String firstName, String lastName) {
-        List<Developer> developerList = readDevelopersFromFile();
-
-        developerList.get(id-1).setFirstName(firstName);
-        developerList.get(id-1).setLastName(lastName);
-        writeDevelopersToFile(developerList);
+        writeDevelopersToFile(currenDeveloper);
     }
 }

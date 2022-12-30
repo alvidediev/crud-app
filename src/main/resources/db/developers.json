@@ -1,1 +1,1 @@
-[{"id":1,"firstName":"Alvi","lastName":"Dediev","skill":[{"id":1,"name":"Spring framework"}],"status":"ACTIVE"}]
+[{"id":1,"firstName":"Dediev","lastName":"Alvs","skill":[{"id":1,"name":"Spring framework","status":"ACTIVE"}],"specialty":{"id":1,"name":"Java-разработчик","status":"ACTIVE"},"status":"ACTIVE"}]

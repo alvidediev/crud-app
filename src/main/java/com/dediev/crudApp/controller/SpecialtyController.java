@@ -24,7 +24,10 @@ public class SpecialtyController {
     }
 
     public void update(Integer id, String name){
-        gsonSpecialtyRepository.update(id, name);
+        Specialty specialty = new Specialty();
+        specialty.setId(id);
+        specialty.setName(name);
+        gsonSpecialtyRepository.update(specialty);
     }
 
     public void delete(Integer id){

@@ -14,8 +14,6 @@ public class SkillsView {
     public void startWorkWithSkills() {
         scanner = new Scanner(System.in);
 
-        boolean stopper = true;
-
         System.out.println("Добро пожаловать в меню специальностей!\n" +
                 "1) Добавить навыков\n" +
                 "2) Изменить навыки в списке\n" +
@@ -24,23 +22,21 @@ public class SkillsView {
                 "5) Вернуться в главное меню");
 
         final int choice = scanner.nextInt();
-        while (stopper) {
-            if (choice == 1) {
-                addSkill();
-                stopper = false;
-            } else if (choice == 2) {
-                updateSkill();
-                stopper = false;
-            } else if (choice == 3) {
-                deleteSkill();
-                stopper = false;
-            } else if (choice == 4) {
-                showAllSkills();
-                stopper = false;
-            } else if (choice == 5) {
-                MainView mainView = new MainView();
-                mainView.start();
-                stopper = false;
+        while (true) {
+            switch (choice) {
+                case 1:
+                    addSkill();
+                    break;
+                case 2:
+                    updateSkill();
+                    break;
+                case 3:
+                    deleteSkill();
+                case 4:
+                    showAllSkills();
+                default:
+                    MainView mainView = new MainView();
+                    mainView.start();
             }
         }
     }

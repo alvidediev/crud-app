@@ -4,8 +4,12 @@ import com.dediev.crudApp.controller.DevelopersController;
 import com.dediev.crudApp.controller.SkillsController;
 import com.dediev.crudApp.controller.SpecialtyController;
 import com.dediev.crudApp.model.Developer;
+import com.dediev.crudApp.model.Skill;
+import com.dediev.crudApp.model.Specialty;
 import com.dediev.crudApp.model.Status;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class DevelopersView {
@@ -18,8 +22,6 @@ public class DevelopersView {
     public void startWorkWithDevelopers() {
         scanner = new Scanner(System.in);
 
-        boolean stopper = true;
-
         System.out.println("Добро пожаловать в меню специальностей!\n" +
                 "1) Добавить разработчика\n" +
                 "2) Изменить разработчика в списке\n" +
@@ -28,23 +30,23 @@ public class DevelopersView {
                 "5) Вернуться в главное меню");
 
         final int choice = scanner.nextInt();
-        while (stopper) {
-            if (choice == 1) {
-                addDeveloper();
-                stopper = false;
-            } else if (choice == 2) {
-                updateDeveloper();
-                stopper = false;
-            } else if (choice == 3) {
-                deleteDeveloper();
-                stopper = false;
-            } else if (choice == 4) {
-                showAllDevs();
-                stopper = false;
-            } else if (choice == 5) {
-                MainView mainView = new MainView();
-                mainView.start();
-                stopper = false;
+        while (true) {
+            switch (choice) {
+                case 1:
+                    addDeveloper();
+                    break;
+                case 2:
+                    updateDeveloper();
+                    break;
+                case 3:
+                    deleteDeveloper();
+                    break;
+                case 4:
+                    showAllDevs();
+                    break;
+                default:
+                    MainView mainView = new MainView();
+                    mainView.start();
             }
         }
     }
@@ -52,21 +54,14 @@ public class DevelopersView {
 
     private void addDeveloper() {
         scanner = new Scanner(System.in);
-        Developer developerToSave = new Developer();
 
         System.out.println("Пожалуйста! Введите фамилию разработчика:");
         String developersFirstName = scanner.nextLine();
-        developerToSave.setFirstName(developersFirstName);
         System.out.println("Пожалуйста! Введите имя разработчика:");
         String developersName = scanner.nextLine();
-        developerToSave.setLastName(developersName);
-        developerToSave.setSkill(skillsController.readAll());
-        System.out.println("Выберите специальность разработчика по ID");
-        System.out.println(specialtyController.readAll());
-        final int idSpecialty = scanner.nextInt();
-        developerToSave.setSpecialty(specialtyController.read(idSpecialty));
-        developerToSave.setStatus(Status.ACTIVE);
-        Developer createdDeveloper = devsController.create(developerToSave);
+        final List<Skill> skill = skillChooser();
+        final Specialty specialty = specialtyChooser();
+        Developer createdDeveloper = devsController.create(developersFirstName, developersName, skill, specialty);
         System.out.println(createdDeveloper);
         startWorkWithDevelopers();
     }
@@ -84,13 +79,16 @@ public class DevelopersView {
     private void updateDeveloper() {
         scanner = new Scanner(System.in);
 
+        System.out.println(devsController.readAll());
         System.out.println("Введите ID разработчика, которого хотите отредактировать");
-        final int id = scanner.nextInt();
+        int id = scanner.nextInt();
         System.out.println("Введите новую фамилию для разработчика");
-        final String firstName = scanner.nextLine();
+        String firstName = scanner.nextLine();
         System.out.println("Введите новое имя для разработчика");
-        final String lastName = scanner.nextLine();
-        devsController.update(id, firstName, lastName);
+        String lastName = scanner.nextLine();
+        final List<Skill> skills = skillChooser();
+        final Specialty specialty = specialtyChooser();
+        devsController.update(id, firstName, lastName, skills, specialty);
         System.out.println(devsController.read(id));
         startWorkWithDevelopers();
     }
@@ -99,4 +97,42 @@ public class DevelopersView {
         System.out.println(devsController.readAll());
         startWorkWithDevelopers();
     }
+
+    private List<Skill> skillChooser() {
+        scanner = new Scanner(System.in);
+
+        List<Skill> currentDeveloperSkills = new ArrayList<>();
+
+        while (true) {
+            System.out.println("Хотите добавить скилл?\n" +
+                    "1) Да\n" +
+                    "2) Нет");
+            final int addSkillsChoice = scanner.nextInt();
+            switch (addSkillsChoice) {
+                case 1:
+                    System.out.println(skillsController.readAll());
+                    System.out.println("Пожалуйста, выберите skill по id ");
+                    final int skillId = scanner.nextInt();
+                    currentDeveloperSkills.add(skillsController.read(skillId));
+                    System.out.println("Вы успешно добавили " + skillsController.read(skillId));
+                case 2:
+                    break;
+                default:
+                    System.out.println("Пожалуйста, введите корректные данные!");
+            }
+
+            return currentDeveloperSkills;
+        }
+    }
+
+    private Specialty specialtyChooser() {
+        scanner = new Scanner(System.in);
+
+        System.out.println("Пожалуйста, выберите специальность по ID");
+        System.out.println(specialtyController.readAll());
+        final int specialtyId = scanner.nextInt();
+
+        return specialtyController.read(specialtyId);
+    }
 }
+

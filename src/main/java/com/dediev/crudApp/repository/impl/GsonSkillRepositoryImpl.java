@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+
 import static com.dediev.crudApp.util.Const.*;
 
 public class GsonSkillRepositoryImpl implements SkillRepository {
@@ -72,25 +73,30 @@ public class GsonSkillRepositoryImpl implements SkillRepository {
         return skillToSave;
     }
 
-
-    /**
-     * id-1 сделан потому что индексация массивов, в т.ч. коллекций в java начинается с 0.
-     *
-     */
-
     @Override
-    public void update(Integer id, String name) {
+    public Skill update(Skill skill) {
         List<Skill> currentSkills = readSkillsFromFile();
 
-        currentSkills.get(id-1).setName(name);
+        currentSkills.forEach(existingSkill -> {
+            if (existingSkill.getId().equals(skill.getId())) {
+                existingSkill.setName(skill.getName());
+            }
+        });
+
         writeSkillsToFile(currentSkills);
+        return skill;
     }
 
     @Override
     public void deleteById(Integer id) {
-        List<Skill> currentSkill = readSkillsFromFile();
+        List<Skill> currentSkills = readSkillsFromFile();
 
-        currentSkill.get(id-1).setStatus(Status.DELETED);
-        writeSkillsToFile(currentSkill);
+        currentSkills.forEach(existingSkill -> {
+            if (existingSkill.getId().equals(id)) {
+                existingSkill.setStatus(Status.DELETED);
+            }
+        });
+
+        writeSkillsToFile(currentSkills);
     }
 }

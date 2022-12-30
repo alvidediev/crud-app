@@ -70,24 +70,31 @@ public class GsonSpecialtyRepositoryImpl implements SpecialtyRepository {
         return specialty;
     }
 
-    /**
-     * id-1 сделан потому что индексация массивов, в т.ч. коллекций в java начинается с 0.
-     *
-     */
+    @Override
+    public Specialty update(Specialty specialty) {
+        List<Specialty> currentSpecialty = readSpecialtyFromFile();
+
+        currentSpecialty.forEach(specialtyForUpdate -> {
+            if (specialtyForUpdate.getId().equals(specialty.getId())) {
+                specialtyForUpdate.setName(specialty.getName());
+            }
+        });
+
+        writeSpecialtyToFile(currentSpecialty);
+        return specialty;
+    }
+
 
     @Override
     public void deleteById(Integer id) {
         List<Specialty> currentSpecialty = readSpecialtyFromFile();
 
-        currentSpecialty.get(id-1).setStatus(Status.DELETED);
-        writeSpecialtyToFile(currentSpecialty);
-    }
+        currentSpecialty.forEach(specialty -> {
+            if (specialty.getId().equals(id)) {
+                specialty.setStatus(Status.DELETED);
+            }
+        });
 
-    @Override
-    public void update(Integer id, String name) {
-        List<Specialty> currentSpecialty = readSpecialtyFromFile();
-
-        currentSpecialty.get(id-1).setName(name);
         writeSpecialtyToFile(currentSpecialty);
     }
 }
